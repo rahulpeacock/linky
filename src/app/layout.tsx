@@ -3,10 +3,7 @@ import '@/styles/main.scss';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
 
-const inter = Inter({
-	subsets: ['latin'],
-	variable: '--font-sans',
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
 	title: 'Url shortener',
@@ -21,7 +18,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
-			<body className={`font-sans ${inter.variable}`}>
+			<body className={`${inter.className}`}>
 				<TRPCReactProvider cookies={cookies().toString()}>{children}</TRPCReactProvider>
 			</body>
 		</html>
