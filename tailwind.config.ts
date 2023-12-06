@@ -71,7 +71,7 @@ module.exports = {
 			},
 			boxShadow: {
 				spread: 'rgba(0, 0, 0, 0.16) 0px 24px 48px',
-				'spread-dark': 'rgba(255, 255, 255, 0.16) 0px 24px 48px',
+				'spread-dark': 'rgba(255, 255, 255, 0.05) 0px 24px 48px',
 			},
 		},
 	},

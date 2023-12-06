@@ -62,12 +62,7 @@ function UserProfile({ session }: { session: Session }) {
 						</Avatar>
 					</button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent
-					className='w-96 rounded-[1rem] border-background shadow-spread dark:shadow-spread-dark pb-0'
-					variant='space'
-					align='end'
-					sideOffset={12}
-				>
+				<DropdownMenuContent className='w-96 rounded-[1rem] shadow-spread dark:shadow-spread-dark pb-0' variant='space' align='end' sideOffset={12}>
 					<DropdownMenuLabel className='font-normal px-6 py-0 mb-2'>
 						<div className='flex justify-start items-center gap-4'>
 							<div className='w-11 aspect-square'>
@@ -116,7 +111,7 @@ const AUTHORIZED_ROUTES = [
 	{
 		id: 1,
 		label: 'Your Profile',
-		href: '/dashboard',
+		href: '/profile',
 		icon: UserRound,
 	},
 ] as const;

@@ -11,9 +11,9 @@ export default function Header() {
 						Linkly
 					</Link>
 				</div>
-				<nav className='flex items-center justify-center'>
-					<ThemeToggle />
+				<nav className='flex items-center justify-center gap-5'>
 					<HeaderAuth />
+					<ThemeToggle />
 				</nav>
 			</div>
 		</header>
