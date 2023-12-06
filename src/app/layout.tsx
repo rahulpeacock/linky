@@ -1,3 +1,4 @@
+import NextAuthSession from '@/client/providers/next-auth-session';
 import ReduxProvider from '@/client/providers/redux-provider';
 import { TRPCReactProvider } from '@/client/providers/trpc-react-provider';
 import '@/styles/main.scss';
@@ -21,7 +22,9 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className={`${inter.className}`}>
 				<TRPCReactProvider cookies={cookies().toString()}>
-					<ReduxProvider>{children}</ReduxProvider>
+					<ReduxProvider>
+						<NextAuthSession>{children}</NextAuthSession>
+					</ReduxProvider>
 				</TRPCReactProvider>
 			</body>
 		</html>
