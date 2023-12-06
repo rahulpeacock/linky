@@ -62,7 +62,7 @@ function UserProfile({ session }: { session: Session }) {
 						</Avatar>
 					</button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent className='w-96 rounded-[1rem] shadow-spread dark:shadow-spread-dark pb-0' variant='space' align='end' sideOffset={12}>
+				<DropdownMenuContent className='w-96 rounded-[1rem] shadow-spread pb-0' variant='space' align='end' sideOffset={12}>
 					<DropdownMenuLabel className='font-normal px-6 py-0 mb-2'>
 						<div className='flex justify-start items-center gap-4'>
 							<div className='w-11 aspect-square'>
@@ -85,16 +85,16 @@ function UserProfile({ session }: { session: Session }) {
 					<DropdownMenuGroup>
 						<NavAuthLinks />
 						<DropdownMenuItem
-							className='focus:bg-destructive w-full hover:cursor-pointer px-6 py-3.5 rounded-none group'
+							className='focus:bg-destructive w-full hover:cursor-pointer px-6 py-3.5 rounded-none group font-medium'
 							onClick={(e) => e.preventDefault()}
 							asChild
 						>
-							<button type='button' className='gap-4' onClick={handleSignout} disabled={loading}>
+							<button type='button' className='gap-4 text-muted-foreground group' onClick={handleSignout} disabled={loading}>
 								<span className='flex items-stretch justify-center basis-11'>
 									{loading ? (
 										<CircularLoader className='h-5' />
 									) : (
-										<LogOut className='text-gray-500 duration-300 group-hover:text-foreground' size={16} strokeWidth={2.25} />
+										<LogOut className='duration-100 group-hover:text-foreground' size={16} strokeWidth={2.25} />
 									)}
 								</span>
 								<span>Sign out</span>
@@ -124,10 +124,10 @@ function NavAuthLinks() {
 			{session?.user && (
 				<Fragment>
 					{AUTHORIZED_ROUTES.map((link) => (
-						<DropdownMenuItem key={link.id} className='px-6 py-3.5 rounded-none group' asChild>
-							<Link href={link.href} className='hover:cursor-pointer flex justify-start items-center gap-4'>
+						<DropdownMenuItem key={link.id} className='px-6 py-3.5 rounded-none group font-medium' asChild>
+							<Link href={link.href} className='text-muted-foreground hover:cursor-pointer flex justify-start items-center gap-4'>
 								<span className='flex items-stretch justify-center basis-11'>
-									{<link.icon className='text-gray-500 duration-300 group-hover:text-foreground' size={16} strokeWidth={2.25} />}
+									{<link.icon className='duration-100 group-hover:text-foreground' size={16} strokeWidth={2.25} />}
 								</span>
 								<span>{link.label}</span>
 							</Link>
