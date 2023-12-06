@@ -62,7 +62,12 @@ function UserProfile({ session }: { session: Session }) {
 						</Avatar>
 					</button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent className='w-96 rounded-[1rem] border-white shadow-spread pb-0' variant='space' align='end' sideOffset={12}>
+				<DropdownMenuContent
+					className='w-96 rounded-[1rem] border-background shadow-spread dark:shadow-spread-dark pb-0'
+					variant='space'
+					align='end'
+					sideOffset={12}
+				>
 					<DropdownMenuLabel className='font-normal px-6 py-0 mb-2'>
 						<div className='flex justify-start items-center gap-4'>
 							<div className='w-11 aspect-square'>
@@ -85,7 +90,7 @@ function UserProfile({ session }: { session: Session }) {
 					<DropdownMenuGroup>
 						<NavAuthLinks />
 						<DropdownMenuItem
-							className='focus:bg-red-100 w-full hover:cursor-pointer px-6 py-3.5 rounded-none group'
+							className='focus:bg-destructive w-full hover:cursor-pointer px-6 py-3.5 rounded-none group'
 							onClick={(e) => e.preventDefault()}
 							asChild
 						>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ThemeToggle } from '../theme-toggle';
 import { HeaderAuth } from './client';
 
 export default function Header() {
@@ -11,6 +12,7 @@ export default function Header() {
 					</Link>
 				</div>
 				<nav className='flex items-center justify-center'>
+					<ThemeToggle />
 					<HeaderAuth />
 				</nav>
 			</div>
