@@ -9,10 +9,11 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { genetateUserName } from '@/lib/utils/generate-username';
-import { LayoutDashboard, LogIn, LogOut } from 'lucide-react';
+import { LogIn, LogOut, UserRound } from 'lucide-react';
 import { Session } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -30,7 +31,7 @@ export function HeaderAuth() {
 	return (
 		<Button asChild className='px-5 text-sm'>
 			<Link href={'/auth/signin'}>
-				Signin <LogIn size={16} className='ml-2' strokeWidth={2.5} />
+				Sign in <LogIn size={16} className='ml-2' strokeWidth={2.5} />
 			</Link>
 		</Button>
 	);
@@ -84,13 +85,17 @@ function UserProfile({ session }: { session: Session }) {
 					<DropdownMenuGroup>
 						<NavAuthLinks />
 						<DropdownMenuItem
-							className='focus:bg-red-100 w-full hover:cursor-pointer px-6 py-3.5 rounded-none text-black-1050'
+							className='focus:bg-red-100 w-full hover:cursor-pointer px-6 py-3.5 rounded-none group'
 							onClick={(e) => e.preventDefault()}
 							asChild
 						>
 							<button type='button' className='gap-4' onClick={handleSignout} disabled={loading}>
 								<span className='flex items-stretch justify-center basis-11'>
-									{loading ? <CircularLoader className='h-5' /> : <LogOut className='text-grey-1050' size={16} strokeWidth={2.25} />}
+									{loading ? (
+										<CircularLoader className='h-5' />
+									) : (
+										<LogOut className='text-gray-500 duration-300 group-hover:text-foreground' size={16} strokeWidth={2.25} />
+									)}
 								</span>
 								<span>Sign out</span>
 							</button>
@@ -107,7 +112,7 @@ const AUTHORIZED_ROUTES = [
 		id: 1,
 		label: 'Your Profile',
 		href: '/dashboard',
-		icon: LayoutDashboard,
+		icon: UserRound,
 	},
 ] as const;
 
@@ -119,15 +124,16 @@ function NavAuthLinks() {
 			{session?.user && (
 				<Fragment>
 					{AUTHORIZED_ROUTES.map((link) => (
-						<DropdownMenuItem key={link.id} className='px-6 py-3.5 rounded-none text-black-1050' asChild>
+						<DropdownMenuItem key={link.id} className='px-6 py-3.5 rounded-none group' asChild>
 							<Link href={link.href} className='hover:cursor-pointer flex justify-start items-center gap-4'>
 								<span className='flex items-stretch justify-center basis-11'>
-									{<link.icon className='text-grey-1050' size={16} strokeWidth={2.25} />}
+									{<link.icon className='text-gray-500 duration-300 group-hover:text-foreground' size={16} strokeWidth={2.25} />}
 								</span>
 								<span>{link.label}</span>
 							</Link>
 						</DropdownMenuItem>
 					))}
+					<DropdownMenuSeparator />
 				</Fragment>
 			)}
 		</Fragment>
