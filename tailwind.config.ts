@@ -69,6 +69,9 @@ module.exports = {
 			maxWidth: {
 				maxi: '1480px',
 			},
+			boxShadow: {
+				spread: 'rgba(0, 0, 0, 0.16) 0px 24px 48px',
+			},
 		},
 	},
 	plugins: [require('tailwindcss-animate')],
