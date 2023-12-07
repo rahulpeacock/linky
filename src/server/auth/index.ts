@@ -50,12 +50,13 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
-		session({ session, user }) {
-			if (user) {
-				session.user.id = user.id;
-			}
-			return session;
-		},
+		session: ({ session, token }) => ({
+			...session,
+			user: {
+				...session.user,
+				id: token.sub,
+			},
+		}),
 	},
 	session: {
 		strategy: 'jwt',
