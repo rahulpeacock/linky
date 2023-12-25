@@ -61,10 +61,15 @@ module.exports = {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' },
 				},
+				'loading-rotate': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				'loading-rotate': 'loading-rotate 0.2s linear infinite',
 			},
 			maxWidth: {
 				maxi: '1480px',

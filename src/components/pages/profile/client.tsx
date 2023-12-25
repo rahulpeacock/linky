@@ -2,12 +2,14 @@
 
 import { useCopy } from '@/client/hooks/use-copy.hook';
 import { api } from '@/client/trpc';
+import CircularLoader from '@/components/global/loading/circular-loader';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Copy, Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -18,6 +20,7 @@ const formSchema = z.object({
 
 export function AddUrl() {
 	const { handleCopy } = useCopy();
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -27,16 +30,17 @@ export function AddUrl() {
 	const mutation = api.url.createUrl.useMutation({
 		onSuccess: (data) => {
 			toast.success('Url shortened', {
-				description: data[0]?.shortenUrl,
+				description: data.baseShortenUrl,
 				action: {
 					label: 'Copy url',
 					onClick: (e) => {
 						e.preventDefault();
-						handleCopy(data[0]?.shortenUrl as string);
+						handleCopy(data.baseShortenUrl as string);
 						console.log('copied to clipboard');
 					},
 				},
 			});
+			router.refresh();
 		},
 		onError: (err) => {
 			toast.error('Failed to shorten', { description: err.message });
@@ -63,8 +67,9 @@ export function AddUrl() {
 						</FormItem>
 					)}
 				/>
-				<Button size='lg' type='submit'>
-					Shorten
+				<Button size='lg' type='submit' disabled={mutation.isLoading}>
+					<span className={`${mutation.isLoading && 'opacity-0'}`}>Shorten</span>
+					{mutation.isLoading ? <CircularLoader className='absolute bg-transparent border-x-transparent border-b-transparent' /> : null}
 				</Button>
 			</form>
 		</Form>

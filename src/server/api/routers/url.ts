@@ -1,5 +1,6 @@
 import { nanoid } from '@/lib/utils/generate-nanoid';
 import { urls } from '@/server/db/schema/urls';
+import { getBaseUrl } from '@/server/trpc/shared';
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
@@ -28,7 +29,7 @@ export const urlRouter = createTRPCRouter({
 					})
 					.returning();
 
-				return res;
+				return { ...res[0], baseShortenUrl: `${getBaseUrl()}/x/${res[0]?.shortenUrl}` };
 			} catch (err) {
 				throw new Error(input.redirectUrl);
 			}

@@ -8,6 +8,7 @@ interface ExtendedLoadingProps {
 
 export default function CircularLoader({ className, asChild = false }: ExtendedLoadingProps) {
 	const Comp = asChild ? Slot : 'div';
+
 	return (
 		<Comp
 			className={cn(
