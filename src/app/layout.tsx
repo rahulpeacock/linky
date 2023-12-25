@@ -1,8 +1,8 @@
 import NextAuthSession from '@/client/providers/next-auth-session';
 import ReduxProvider from '@/client/providers/redux-provider';
 import { ThemeProvider } from '@/client/providers/theme-provider';
-import { ToastProvider } from '@/client/providers/toast-provider';
 import { TRPCReactProvider } from '@/client/providers/trpc-react-provider';
+import { Toaster } from '@/components/ui/sonner';
 import '@/styles/main.scss';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
@@ -28,7 +28,7 @@ export default function RootLayout({
 						<NextAuthSession>
 							<ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
 								{children}
-								<ToastProvider />
+								<Toaster />
 							</ThemeProvider>
 						</NextAuthSession>
 					</ReduxProvider>
