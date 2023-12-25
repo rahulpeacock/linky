@@ -1,23 +1,28 @@
 // Present: id, title, redirectUrl, shortenUrl, clicks, status
 // Future: lastVisit
 
-import { bigint, boolean, date, serial, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { bigint, boolean, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { pgTable } from '.';
 
 export const urls = pgTable(
 	'urls',
 	{
 		id: serial('id'),
-		title: varchar('title', { length: 256 }),
-		redirectUrl: varchar('redirect_url', { length: 256 }),
-		shortenUrl: varchar('shorten_url', { length: 256 }).primaryKey(),
-		clicks: bigint('clicks', { mode: 'number' }),
-		status: boolean('status').default(true),
-		lastVisit: date('last_visit', { mode: 'date' }),
+		userId: varchar('user_id', { length: 255 }).notNull(),
+		title: varchar('title', { length: 255 }).notNull(),
+		redirectUrl: varchar('redirect_url', { length: 255 }).notNull(),
+		shortenUrl: varchar('shorten_url', { length: 255 }).notNull().primaryKey(),
+		clicks: bigint('clicks', { mode: 'number' }).default(0).notNull(),
+		status: boolean('status').default(true).notNull(),
+		createdAt: timestamp('created-at', { mode: 'string' }).notNull(),
+		updatedAt: timestamp('updated-at', { mode: 'string' }).notNull(),
+		lastVisit: timestamp('last_visit', { mode: 'date' }),
 	},
 	(table) => {
 		return {
-			shortenUrlIdx: uniqueIndex('shorten_url_idx').on(table.shortenUrl),
+			shortenUrl: uniqueIndex('shorten_url').on(table.shortenUrl),
 		};
 	},
 );
+export type Urls = typeof urls.$inferSelect;
+export type NewUrl = typeof urls.$inferInsert;
