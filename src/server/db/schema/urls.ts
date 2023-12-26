@@ -1,7 +1,7 @@
 // Present: id, title, redirectUrl, shortenUrl, clicks, status
 // Future: lastVisit
 
-import { bigint, boolean, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { bigint, boolean, index, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { pgTable } from '.';
 
 export const urls = pgTable(
@@ -16,11 +16,12 @@ export const urls = pgTable(
 		status: boolean('status').default(true).notNull(),
 		createdAt: timestamp('created-at', { mode: 'string' }).notNull(),
 		updatedAt: timestamp('updated-at', { mode: 'string' }).notNull(),
-		lastVisit: timestamp('last_visit', { mode: 'date' }),
+		lastVisit: timestamp('last_visit', { mode: 'string' }),
 	},
 	(table) => {
 		return {
 			shortenUrl: uniqueIndex('shorten_url').on(table.shortenUrl),
+			userId: index('user_id').on(table.userId),
 		};
 	},
 );
