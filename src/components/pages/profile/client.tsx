@@ -6,11 +6,14 @@ import CircularLoader from '@/components/global/loading/circular-loader';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Urls } from '@/server/db/schema/urls';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Copy, Settings } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -42,6 +45,7 @@ export function AddUrl() {
 				},
 			});
 			router.refresh();
+			form.reset({ redirectUrl: '' });
 		},
 		onError: (err) => {
 			toast.error('Failed to shorten', { description: err.message });
@@ -95,7 +99,7 @@ export function UrlSettings(props: Urls) {
 					<Settings size={16} className='text-muted-foreground group-hover:text-foreground duration-200' />
 				</Button>
 			</SheetTrigger>
-			<SheetContent>
+			<SheetContent className='flex items-stretch justify-start flex-col'>
 				<SheetHeader>
 					<SheetTitle>Update link</SheetTitle>
 					<SheetDescription>Your can edit your shorten links</SheetDescription>
@@ -103,6 +107,9 @@ export function UrlSettings(props: Urls) {
 				<div className='py-3'>
 					<UrlSettingsForm {...props} />
 				</div>
+				<SheetFooter className='mt-auto'>
+					<DeleteUrl title={props.title} shortenUrl={props.shortenUrl} redirectUrl={props.redirectUrl} />
+				</SheetFooter>
 			</SheetContent>
 		</Sheet>
 	);
@@ -211,5 +218,55 @@ function UrlSettingsForm(props: Urls) {
 				</Button>
 			</form>
 		</Form>
+	);
+}
+
+function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' | 'redirectUrl' | 'title'>) {
+	const router = useRouter();
+	const [isWarning, setIsWarning] = useState(false);
+	const mutation = api.url.deleteUrl.useMutation({
+		onSuccess: (data) => {
+			toast.success('Url deleted successfully', {
+				description: data.url[0]?.title,
+			});
+			router.refresh();
+		},
+		onError: (err) => {
+			toast.error('Failed to delete url!', {
+				description: err.message,
+			});
+		},
+	});
+
+	function handleClick() {
+		if (isWarning) mutation.mutate({ shortenUrl });
+	}
+
+	return (
+		<div className='w-full'>
+			<AnimatePresence>
+				{isWarning && (
+					<motion.div initial={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }} exit={{ opacity: 0, translateY: 20 }}>
+						<p className='text-sm py-3 text-center text-muted-foreground'>
+							Are you sure you want to delete -{' '}
+							<Button className='font-medium p-0 text-muted-foreground' variant='link'>
+								<Link href={redirectUrl}>{title}</Link>
+							</Button>
+						</p>
+					</motion.div>
+				)}
+			</AnimatePresence>
+			{isWarning ? (
+				<SheetClose asChild>
+					<Button className='w-full' type='button' variant='destructive' onClick={handleClick} disabled={mutation.isLoading}>
+						Delete Url
+					</Button>
+				</SheetClose>
+			) : (
+				<Button className='w-full' type='button' variant='destructive' onClick={() => setIsWarning(true)} disabled={mutation.isLoading}>
+					Delete Url
+				</Button>
+			)}
+		</div>
 	);
 }

@@ -43,8 +43,8 @@ export const urlRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ input, ctx }) => {
+			const { payload, shortenUrl } = input;
 			try {
-				const { payload, shortenUrl } = input;
 				// check if the shortenUrl in payload is present in the db
 				if (payload.shortenUrl) {
 					const res = await ctx.db.select({ shortenUrl: urls.shortenUrl }).from(urls).where(eq(urls.shortenUrl, payload.shortenUrl));
@@ -65,7 +65,26 @@ export const urlRouter = createTRPCRouter({
 					baseShortenUrl: `${getBaseUrl()}/x/${url[0]?.shortenUrl}`,
 				};
 			} catch (err) {
-				throw new Error(input.shortenUrl);
+				throw new Error(`${getBaseUrl()}/x/${shortenUrl}`);
+			}
+		}),
+	deleteUrl: protectedProcedure
+		.input(
+			z.object({
+				shortenUrl: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			const { shortenUrl } = input;
+			try {
+				const url = await ctx.db.delete(urls).where(eq(urls.shortenUrl, shortenUrl)).returning();
+				return {
+					success: true,
+					url,
+					baseShortenUrl: `${getBaseUrl()}/x/${shortenUrl}`,
+				};
+			} catch (err) {
+				throw new Error(`${getBaseUrl()}/x/${shortenUrl}`);
 			}
 		}),
 });
