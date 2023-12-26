@@ -8,7 +8,7 @@ import { Copy, Settings } from 'lucide-react';
 import { Session } from 'next-auth';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { CopyLink, LinkSettings } from './client';
+import { CopyLink, UrlSettings } from './client';
 
 export default async function UserUrls({ session }: { session: Session }) {
 	const userUrls = await getUrls(session.user.id);
@@ -30,7 +30,8 @@ async function getUrls(id: string) {
 	return userUrls;
 }
 
-function UrlCard({ title, redirectUrl, shortenUrl, clicks }: Urls) {
+function UrlCard(props: Urls) {
+	const { title, redirectUrl, shortenUrl, clicks } = props;
 	const baseShortenUrl = `${getBaseUrl()}/x/${shortenUrl}`;
 
 	return (
@@ -38,7 +39,7 @@ function UrlCard({ title, redirectUrl, shortenUrl, clicks }: Urls) {
 			<div className='flex items-center justify-start'>
 				<h2 className='font-medium'>{title}</h2>
 				<CopyLink shortenUrl={baseShortenUrl} />
-				<LinkSettings />
+				<UrlSettings {...props} />
 			</div>
 			<p className='text-sm text-muted-foreground mb-3 mt-1'>{redirectUrl}</p>
 			<hr />

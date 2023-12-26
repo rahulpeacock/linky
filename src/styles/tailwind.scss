@@ -103,6 +103,14 @@
         background-color: hsl(var(--primary) / 0.4);
         outline: none;
     }
+
+    body {
+        margin: 0;
+    }
+
+    body[style] {
+        margin-right: 0px !important;
+    }
 }
 
 @layer base {
