@@ -2,7 +2,6 @@
 
 import { useCopy } from '@/client/hooks/use-copy.hook';
 import { api } from '@/client/trpc';
-import CircularLoader from '@/components/global/loading/circular-loader';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -101,12 +100,12 @@ export function UrlSettings(props: Urls) {
 					<Settings size={16} className='text-muted-foreground group-hover:text-foreground duration-200' />
 				</Button>
 			</SheetTrigger>
-			<SheetContent className='flex items-stretch justify-start flex-col'>
+			<SheetContent className='flex items-stretch justify-start flex-col' onOpenAutoFocus={(e) => e.preventDefault()}>
 				<SheetHeader>
 					<SheetTitle>Update link</SheetTitle>
 					<SheetDescription>Your can edit your shorten links</SheetDescription>
 				</SheetHeader>
-				<div className='py-3'>
+				<div className='py-2'>
 					<UrlSettingsForm {...props} />
 				</div>
 				<SheetFooter className='mt-auto'>
@@ -214,8 +213,7 @@ function UrlSettingsForm(props: Urls) {
 					)}
 				/>
 				<Button type='submit' className='w-full' disabled={!form.formState.isDirty || mutation.isLoading}>
-					<span className={`${mutation.isLoading && 'opacity-0'}`}>Update Url</span>
-					{mutation.isLoading ? <CircularLoader className='absolute bg-transparent border-x-transparent border-b-transparent' /> : null}
+					Update Url
 				</Button>
 			</form>
 		</Form>
