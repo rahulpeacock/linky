@@ -72,10 +72,11 @@ export const urlRouter = createTRPCRouter({
 		.input(
 			z.object({
 				shortenUrl: z.string(),
+				title: z.string(),
 			}),
 		)
 		.mutation(async ({ input, ctx }) => {
-			const { shortenUrl } = input;
+			const { shortenUrl, title } = input;
 			try {
 				const url = await ctx.db.delete(urls).where(eq(urls.shortenUrl, shortenUrl)).returning();
 				return {
@@ -84,7 +85,7 @@ export const urlRouter = createTRPCRouter({
 					baseShortenUrl: `${getBaseUrl()}/x/${shortenUrl}`,
 				};
 			} catch (err) {
-				throw new Error(`${getBaseUrl()}/x/${shortenUrl}`);
+				throw new Error(title);
 			}
 		}),
 });

@@ -35,9 +35,6 @@ export function AddUrl() {
 			router.refresh();
 			form.reset({ redirectUrl: '' });
 		},
-		onError: (err) => {
-			toast.error('Failed to shorten', { description: err.message });
-		},
 	});
 
 	function onSubmit(formData: z.infer<typeof formSchema>) {
@@ -55,6 +52,9 @@ export function AddUrl() {
 							</span>
 						),
 					});
+				},
+				onError: (err) => {
+					toast.error('Failed to shorten', { id: toastId, description: err.message });
 				},
 			},
 		);
@@ -230,18 +230,13 @@ function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' |
 		onSuccess: () => {
 			router.refresh();
 		},
-		onError: (err) => {
-			toast.error('Failed to delete url!', {
-				description: err.message,
-			});
-		},
 	});
 
 	function handleClick() {
 		if (isWarning) {
 			const toastId = toast.loading('Deleting Url...');
 			mutation.mutate(
-				{ shortenUrl },
+				{ shortenUrl, title },
 				{
 					onSuccess: (data) => {
 						toast.success('Url deleted successfully', {
@@ -253,6 +248,16 @@ function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' |
 							),
 						});
 						sheetCloseRef.current?.click();
+					},
+					onError: (err) => {
+						toast.error('Failed to delete url!', {
+							id: toastId,
+							description: (
+								<span>
+									Title: <span className='font-semibold'>{err.message}</span>
+								</span>
+							),
+						});
 					},
 				},
 			);
