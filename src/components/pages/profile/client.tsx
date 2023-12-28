@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Copy, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { ElementRef, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -23,7 +23,6 @@ const formSchema = z.object({
 });
 
 export function AddUrl() {
-	const { handleCopy } = useCopy();
 	const router = useRouter();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -32,18 +31,7 @@ export function AddUrl() {
 		},
 	});
 	const mutation = api.url.createUrl.useMutation({
-		onSuccess: (data) => {
-			toast.success('Url shortened', {
-				description: data.baseShortenUrl,
-				action: {
-					label: 'Copy url',
-					onClick: (e) => {
-						e.preventDefault();
-						handleCopy(data.baseShortenUrl as string);
-						console.log('copied to clipboard');
-					},
-				},
-			});
+		onSuccess: () => {
 			router.refresh();
 			form.reset({ redirectUrl: '' });
 		},
@@ -54,7 +42,22 @@ export function AddUrl() {
 
 	function onSubmit(formData: z.infer<typeof formSchema>) {
 		const { redirectUrl } = formData;
-		mutation.mutate({ redirectUrl });
+		const toastId = toast.loading('Shortening Url...');
+		mutation.mutate(
+			{ redirectUrl },
+			{
+				onSuccess: (data) => {
+					toast.success('Url shortened', {
+						id: toastId,
+						description: (
+							<span>
+								Title: <span className='font-semibold'>{data.title}</span>
+							</span>
+						),
+					});
+				},
+			},
+		);
 	}
 
 	return (
@@ -73,8 +76,7 @@ export function AddUrl() {
 					)}
 				/>
 				<Button size='lg' type='submit' disabled={mutation.isLoading}>
-					<span className={`${mutation.isLoading && 'opacity-0'}`}>Shorten</span>
-					{mutation.isLoading ? <CircularLoader className='absolute bg-transparent border-x-transparent border-b-transparent' /> : null}
+					Shorten
 				</Button>
 			</form>
 		</Form>
@@ -140,12 +142,11 @@ function UrlSettingsForm(props: Urls) {
 			if (data.success) {
 				toast.success('Url updated successfully', {
 					description: data.baseShortenUrl,
-					position: 'bottom-left',
 					action: {
 						label: 'Copy url',
 						onClick: (e) => {
 							e.preventDefault();
-							handleCopy(data.baseShortenUrl as string, 'bottom-left');
+							handleCopy(data.baseShortenUrl as string);
 						},
 					},
 				});
@@ -223,12 +224,10 @@ function UrlSettingsForm(props: Urls) {
 
 function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' | 'redirectUrl' | 'title'>) {
 	const router = useRouter();
+	const sheetCloseRef = useRef<ElementRef<typeof SheetClose>>(null);
 	const [isWarning, setIsWarning] = useState(false);
 	const mutation = api.url.deleteUrl.useMutation({
-		onSuccess: (data) => {
-			toast.success('Url deleted successfully', {
-				description: data.url[0]?.title,
-			});
+		onSuccess: () => {
 			router.refresh();
 		},
 		onError: (err) => {
@@ -239,34 +238,56 @@ function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' |
 	});
 
 	function handleClick() {
-		if (isWarning) mutation.mutate({ shortenUrl });
+		if (isWarning) {
+			const toastId = toast.loading('Deleting Url...');
+			mutation.mutate(
+				{ shortenUrl },
+				{
+					onSuccess: (data) => {
+						toast.success('Url deleted successfully', {
+							id: toastId,
+							description: (
+								<span>
+									Title: <span className='font-semibold'>{data.url[0]?.title}</span>
+								</span>
+							),
+						});
+						sheetCloseRef.current?.click();
+					},
+				},
+			);
+			return;
+		}
+
+		// When isWarning === false
+		setIsWarning(true);
 	}
 
 	return (
 		<div className='w-full'>
 			<AnimatePresence>
 				{isWarning && (
-					<motion.div initial={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }} exit={{ opacity: 0, translateY: 20 }}>
+					<motion.div
+						initial={{ opacity: 0, translateY: 20 }}
+						animate={{ opacity: 1, translateY: 0 }}
+						exit={{ opacity: 0, translateY: 20 }}
+						transition={{ type: 'tween' }}
+					>
 						<p className='text-sm py-3 text-center text-muted-foreground'>
 							Are you sure you want to delete -{' '}
 							<Button className='font-medium p-0 text-muted-foreground' variant='link'>
-								<Link href={redirectUrl}>{title}</Link>
+								<Link href={redirectUrl} target='_blank' rel='noreferrer'>
+									{title}
+								</Link>
 							</Button>
 						</p>
 					</motion.div>
 				)}
 			</AnimatePresence>
-			{isWarning ? (
-				<SheetClose asChild>
-					<Button className='w-full' type='button' variant='destructive' onClick={handleClick} disabled={mutation.isLoading}>
-						Delete Url
-					</Button>
-				</SheetClose>
-			) : (
-				<Button className='w-full' type='button' variant='destructive' onClick={() => setIsWarning(true)} disabled={mutation.isLoading}>
-					Delete Url
-				</Button>
-			)}
+			<Button className='w-full' type='button' variant='destructive' onClick={handleClick} disabled={mutation.isLoading}>
+				Delete Url
+			</Button>
+			{isWarning ? <SheetClose ref={sheetCloseRef} /> : null}
 		</div>
 	);
 }

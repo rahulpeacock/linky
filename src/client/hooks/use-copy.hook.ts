@@ -1,19 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { ToastT, toast } from 'sonner';
+import { toast } from 'sonner';
 
 export function useCopy() {
 	const [showCopy, setShowCopy] = useState(true);
 
-	async function handleCopy(text: string, position?: ToastT['position']) {
+	async function handleCopy(text: string) {
 		try {
 			await navigator.clipboard.writeText(text);
-			toast.success('Copied to clipboard', { position });
+			toast.success('Copied to clipboard');
 			setShowCopy(false);
 			setTimeout(() => setShowCopy(true), 900);
 		} catch (err) {
-			toast.error('Failed to copy!', { position });
+			toast.error('Failed to copy!');
 		}
 	}
 
