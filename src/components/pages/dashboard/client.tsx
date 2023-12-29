@@ -133,9 +133,23 @@ const settingsFormSchema = z.object({
 	title: z
 		.string()
 		.min(2, { message: 'Title must contain at least 2 characters!' })
-		.max(255, { message: 'Title must contain at least 255 characters' }),
-	shortenUrl: z.string(),
-	redirectUrl: z.string().url({ message: 'Enter a valid https redirect URL!' }),
+		.max(255, { message: 'Title must contain at least 255 characters!' }),
+	shortenUrl: z
+		.string()
+		.min(2, { message: 'Shorten Url must contain at least 2 characters!' })
+		.refine(
+			(val) => {
+				if (val.includes(' ')) return false;
+				if (val.startsWith('_')) return false;
+				return true;
+			},
+			(val) => {
+				if (val.includes(' ')) return { message: 'Shorten Url should not contain spaces!' };
+				if (val.startsWith('_')) return { message: 'Shorten Url should not start with underscore(_)' };
+				return { message: '' };
+			},
+		),
+	redirectUrl: z.string().url({ message: 'Enter a valid https URL!' }),
 });
 
 function UrlSettingsForm(props: Urls) {
