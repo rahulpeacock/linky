@@ -252,11 +252,15 @@ function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' |
 		onSuccess: () => {
 			router.refresh();
 		},
+		onSettled: () => {
+			dispatch(setupdateurl({ loading: false }));
+		},
 	});
 
 	function handleClick() {
 		if (isWarning) {
 			const toastId = toast.loading('Deleting Url...');
+			dispatch(setupdateurl({ loading: true }));
 			mutation.mutate(
 				{ shortenUrl, title },
 				{
