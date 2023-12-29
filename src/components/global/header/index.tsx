@@ -12,8 +12,8 @@ export default function Header() {
 					</Link>
 				</div>
 				<nav className='flex items-center justify-center gap-5'>
-					<HeaderAuth />
 					<ThemeToggle />
+					<HeaderAuth />
 				</nav>
 			</div>
 		</header>
