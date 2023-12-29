@@ -11,6 +11,9 @@ const processEnvSchema = z.object({
 
 	// server
 	DATABASE_URL: z.string(),
+
+	// Client
+	NEXT_PUBLIC_VERCEL_URL: z.string(),
 });
 processEnvSchema.parse(process.env);
 

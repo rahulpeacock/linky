@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils/cn';
+import { getClientBaseUrl } from '@/lib/utils/get-base-url';
 import { Urls } from '@/server/db/schema/urls';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -216,11 +218,18 @@ function UrlSettingsForm(props: Urls) {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Short URL</FormLabel>
-							<FormControl>
-								<div className='relative before:content-["https://epic-url-shortener/x/"] before:absolute before:left-2 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground before:pointer-events-none'>
-									<Input className='pl-[222px]' placeholder='Your short url' {...field} />
-								</div>
-							</FormControl>
+							<div
+								className='relative before:content-[attr(data-base-url)] before:absolute before:left-2 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground before:pointer-events-none'
+								data-base-url={`${getClientBaseUrl()}/x/`}
+							>
+								<FormControl>
+									<Input
+										className={cn(`${process.env.NODE_ENV === 'development' ? 'pl-[189px]' : 'pl-[222px]'}`)}
+										placeholder='Your short url'
+										{...field}
+									/>
+								</FormControl>
+							</div>
 							<FormMessage />
 						</FormItem>
 					)}
