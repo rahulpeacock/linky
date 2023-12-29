@@ -19,7 +19,7 @@ export default async function HeroAuth() {
 	return (
 		<Button asChild>
 			<Link href={'/dashboard'} className='gap-2'>
-				Dashboard <LayoutDashboard size={18} strokeWidth={2} />
+				Go to Dashboard <LayoutDashboard size={18} strokeWidth={2} />
 			</Link>
 		</Button>
 	);
