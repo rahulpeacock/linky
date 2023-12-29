@@ -74,6 +74,9 @@ module.exports = {
 			maxWidth: {
 				maxi: '1480px',
 			},
+			minHeight: {
+				hvh: 'calc(100vh - 64px)',
+			},
 			boxShadow: {
 				spread: 'var(--spread)',
 			},
