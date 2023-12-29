@@ -1,3 +1,4 @@
+import Footer from '@/components/global/footer';
 import Header from '@/components/global/header';
 import UserUrls, { UserUrlsLoader } from '@/components/pages/dashboard';
 import { AddUrl } from '@/components/pages/dashboard/client';
@@ -31,6 +32,7 @@ export default async function page() {
 					</div>
 				</section>
 			</main>
+			<Footer />
 		</Fragment>
 	);
 }

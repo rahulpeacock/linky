@@ -1,3 +1,4 @@
+import Footer from '@/components/global/footer';
 import Header from '@/components/global/header';
 import HeroAuth from '@/components/pages/home';
 import { Fragment, Suspense } from 'react';
@@ -21,6 +22,7 @@ export default async function page() {
 					</div>
 				</section>
 			</main>
+			<Footer />
 		</Fragment>
 	);
 }
