@@ -1,3 +1,4 @@
+import { TITLE } from '@/constants/app';
 import { nanoid } from '@/lib/utils/generate-nanoid';
 import { urls } from '@/server/db/schema/urls';
 import { getBaseUrl } from '@/server/trpc/shared';
@@ -21,7 +22,7 @@ export const urlRouter = createTRPCRouter({
 				const url = await ctx.db
 					.insert(urls)
 					.values({
-						title: 'Your url',
+						title: TITLE,
 						userId: id,
 						redirectUrl,
 						shortenUrl,
@@ -39,12 +40,14 @@ export const urlRouter = createTRPCRouter({
 		.input(
 			z.object({
 				payload: z.object({ title: z.string(), shortenUrl: z.string(), redirectUrl: z.string() }).partial(),
+				title: z.string(),
 				shortenUrl: z.string(),
 			}),
 		)
 		.mutation(async ({ input, ctx }) => {
-			const { payload, shortenUrl } = input;
 			try {
+				const { payload, shortenUrl } = input;
+
 				// check if the shortenUrl in payload is present in the db
 				if (payload.shortenUrl) {
 					const res = await ctx.db.select({ shortenUrl: urls.shortenUrl }).from(urls).where(eq(urls.shortenUrl, payload.shortenUrl));
@@ -65,7 +68,7 @@ export const urlRouter = createTRPCRouter({
 					baseShortenUrl: `${getBaseUrl()}/x/${url[0]?.shortenUrl}`,
 				};
 			} catch (err) {
-				throw new Error(`${getBaseUrl()}/x/${shortenUrl}`);
+				throw new Error(input.title);
 			}
 		}),
 	deleteUrl: protectedProcedure
@@ -76,8 +79,8 @@ export const urlRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ input, ctx }) => {
-			const { shortenUrl, title } = input;
 			try {
+				const { shortenUrl } = input;
 				const url = await ctx.db.delete(urls).where(eq(urls.shortenUrl, shortenUrl)).returning();
 				return {
 					success: true,
@@ -85,7 +88,7 @@ export const urlRouter = createTRPCRouter({
 					baseShortenUrl: `${getBaseUrl()}/x/${shortenUrl}`,
 				};
 			} catch (err) {
-				throw new Error(title);
+				throw new Error(input.title);
 			}
 		}),
 });

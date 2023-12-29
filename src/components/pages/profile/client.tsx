@@ -1,6 +1,8 @@
 'use client';
 
 import { useCopy } from '@/client/hooks/use-copy.hook';
+import { dispatch, useAppSelector } from '@/client/store';
+import { setupdateurl } from '@/client/store/slices/url-slice';
 import { api } from '@/client/trpc';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -93,6 +95,8 @@ export function CopyLink({ shortenUrl }: { shortenUrl: string }) {
 }
 
 export function UrlSettings(props: Urls) {
+	const { loading } = useAppSelector((state) => state.urlSlice).updateUrl;
+
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
@@ -100,7 +104,14 @@ export function UrlSettings(props: Urls) {
 					<Settings size={16} className='text-muted-foreground group-hover:text-foreground duration-200' />
 				</Button>
 			</SheetTrigger>
-			<SheetContent className='flex items-stretch justify-start flex-col' onOpenAutoFocus={(e) => e.preventDefault()}>
+			<SheetContent
+				className='flex items-stretch justify-start flex-col'
+				onOpenAutoFocus={(e) => e.preventDefault()}
+				onEscapeKeyDown={(e) => loading && e.preventDefault()}
+				onPointerDown={(e) => loading && e.preventDefault()}
+				onInteractOutside={(e) => loading && e.preventDefault()}
+				loading={loading}
+			>
 				<SheetHeader>
 					<SheetTitle>Update link</SheetTitle>
 					<SheetDescription>Your can edit your shorten links</SheetDescription>
@@ -126,7 +137,6 @@ const settingsFormSchema = z.object({
 });
 
 function UrlSettingsForm(props: Urls) {
-	const { handleCopy } = useCopy();
 	const router = useRouter();
 	const form = useForm<z.infer<typeof settingsFormSchema>>({
 		resolver: zodResolver(settingsFormSchema),
@@ -138,36 +148,50 @@ function UrlSettingsForm(props: Urls) {
 	});
 	const mutation = api.url.updateUrl.useMutation({
 		onSuccess: (data) => {
-			if (data.success) {
-				toast.success('Url updated successfully', {
-					description: data.baseShortenUrl,
-					action: {
-						label: 'Copy url',
-						onClick: (e) => {
-							e.preventDefault();
-							handleCopy(data.baseShortenUrl as string);
-						},
-					},
-				});
-				if (data.url) form.reset(data.url[0]);
+			if (data.success && data.url) {
+				form.reset(data.url[0]);
 				router.refresh();
 				return;
 			}
-			toast.info('Url update failed!', {
-				description: data.message,
-			});
 		},
-		onError: (err) => {
-			toast.error('Failed to update url!', { description: err.message });
+		onSettled: () => {
+			dispatch(setupdateurl({ loading: false }));
 		},
 	});
 
 	function onSubmit(values: z.infer<typeof settingsFormSchema>) {
+		const toastId = toast.loading('Updating Url...');
+		dispatch(setupdateurl({ loading: true }));
+
 		const dirtyFieldKeys = Object.keys(form.formState.dirtyFields);
 		const dirtyFields = Object.fromEntries(Object.entries(values).filter(([key, val]) => dirtyFieldKeys.includes(key)));
 		const payload = settingsFormSchema.partial().parse(dirtyFields);
 
-		mutation.mutate({ payload, shortenUrl: props.shortenUrl });
+		mutation.mutate(
+			{ payload, title: props.title, shortenUrl: props.shortenUrl },
+			{
+				onSuccess: (data) => {
+					if (data.success && data.url) {
+						toast.success('Url updated successfully', {
+							id: toastId,
+							description: (
+								<span>
+									Title: <span className='font-semibold'>{data.url[0]?.title}</span>
+								</span>
+							),
+						});
+						return;
+					}
+					toast.info('Url update failed!', {
+						id: toastId,
+						description: data.message,
+					});
+				},
+				onError: (err) => {
+					toast.error('Failed to update url!', { id: toastId, description: err.message });
+				},
+			},
+		);
 	}
 
 	return (
