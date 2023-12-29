@@ -304,9 +304,10 @@ function DeleteUrl({ title, shortenUrl, redirectUrl }: Pick<Urls, 'shortenUrl' |
 						exit={{ opacity: 0, translateY: 20 }}
 						transition={{ type: 'tween' }}
 					>
-						<p className='text-sm py-3 text-center text-muted-foreground'>
-							Are you sure you want to delete -{' '}
-							<Button className='font-medium p-0 text-muted-foreground' variant='link'>
+						<p className='text-sm pt-3 pb-2 text-center text-muted-foreground'>
+							Are you sure you want to delete
+							<br />
+							<Button className='font-medium p-0 pt-1 text-muted-foreground h-auto' variant='link'>
 								<Link href={redirectUrl} target='_blank' rel='noreferrer'>
 									{title}
 								</Link>
