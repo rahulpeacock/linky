@@ -1,6 +1,6 @@
 import Header from '@/components/global/header';
-import UserUrls, { UserUrlsLoader } from '@/components/pages/profile';
-import { AddUrl } from '@/components/pages/profile/client';
+import UserUrls, { UserUrlsLoader } from '@/components/pages/dashboard';
+import { AddUrl } from '@/components/pages/dashboard/client';
 import { getServerAuthSession } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import { Fragment, Suspense } from 'react';

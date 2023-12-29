@@ -217,7 +217,9 @@ function UrlSettingsForm(props: Urls) {
 						<FormItem>
 							<FormLabel>Short URL</FormLabel>
 							<FormControl>
-								<Input placeholder='Your short url' {...field} />
+								<div className='relative before:content-["https://epic-url-shortener/x/"] before:absolute before:left-2 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground before:pointer-events-none'>
+									<Input className='pl-[222px]' placeholder='Your short url' {...field} />
+								</div>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

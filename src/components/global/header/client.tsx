@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { genetateUserName } from '@/lib/utils/generate-username';
-import { LogIn, LogOut, UserRound } from 'lucide-react';
+import { LayoutDashboard, LogIn, LogOut } from 'lucide-react';
 import { Session } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -111,9 +111,9 @@ function UserProfile({ session }: { session: Session }) {
 const AUTHORIZED_ROUTES = [
 	{
 		id: 1,
-		label: 'Your Profile',
-		href: '/profile',
-		icon: UserRound,
+		label: 'Dashboard',
+		href: '/dashboard',
+		icon: LayoutDashboard,
 	},
 ] as const;
 
