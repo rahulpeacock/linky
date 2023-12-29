@@ -1,6 +1,7 @@
 import Footer from '@/components/global/footer';
 import Header from '@/components/global/header';
 import HeroAuth from '@/components/pages/home';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Fragment, Suspense } from 'react';
 
 export default async function page() {
@@ -15,7 +16,7 @@ export default async function page() {
 							Linkly is an efficient and easy-to-use URL shortening service that streamlines your online experience.
 						</p>
 						<div className='text-center pt-5'>
-							<Suspense fallback={<div>loading...</div>}>
+							<Suspense fallback={<Skeleton className='h-9 w-36' />}>
 								<HeroAuth />
 							</Suspense>
 						</div>
