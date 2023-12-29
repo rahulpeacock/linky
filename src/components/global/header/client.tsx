@@ -12,6 +12,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
 import { genetateUserName } from '@/lib/utils/generate-username';
 import { LogIn, LogOut, UserRound } from 'lucide-react';
 import { Session } from 'next-auth';
@@ -24,9 +25,9 @@ import { Fragment, useState } from 'react';
 export function HeaderAuth() {
 	const { data: session, status } = useSession();
 
-	if (status === 'authenticated' && session) {
-		return <UserProfile session={session} />;
-	}
+	if (status === 'loading') return <Skeleton className='h-10 w-[109px]' />;
+
+	if (status === 'authenticated' && session) return <UserProfile session={session} />;
 
 	return (
 		<Button asChild className='px-5 text-sm'>
