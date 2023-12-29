@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AUTH_PAGES } from '@/constants/auth';
 import { genetateUserName } from '@/lib/utils/generate-username';
 import { LayoutDashboard, LogIn, LogOut } from 'lucide-react';
 import { Session } from 'next-auth';
@@ -31,7 +32,7 @@ export function HeaderAuth() {
 
 	return (
 		<Button asChild className='px-5 text-sm'>
-			<Link href={'/auth/signin'}>
+			<Link href={AUTH_PAGES.signIn}>
 				Sign in <LogIn size={16} className='ml-2' strokeWidth={2.5} />
 			</Link>
 		</Button>
