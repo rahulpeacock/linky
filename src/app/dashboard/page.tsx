@@ -2,6 +2,7 @@ import Footer from '@/components/global/footer';
 import Header from '@/components/global/header';
 import UserUrls, { UserUrlsLoader } from '@/components/pages/dashboard';
 import { AddUrl } from '@/components/pages/dashboard/client';
+import { AUTH_PAGES } from '@/constants/auth';
 import { getServerAuthSession } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import { Fragment, Suspense } from 'react';
@@ -10,7 +11,7 @@ export default async function page() {
 	const session = await getServerAuthSession();
 
 	// for unauthenticated user
-	if (!session?.user) return redirect('/');
+	if (!session?.user) return redirect(AUTH_PAGES.signIn);
 
 	return (
 		<Fragment>
