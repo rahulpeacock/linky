@@ -14,7 +14,6 @@ interface OAuthSigninProps {
 }
 
 export default function OAuthSignin({ providers }: OAuthSigninProps) {
-	console.log(providers);
 	const { loading, id } = useAppSelector((state) => state.authSlice).signin;
 	const { resolvedTheme } = useTheme();
 
