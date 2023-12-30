@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { getProviders } from 'next-auth/react';
 
 export const metadata: Metadata = {
-	title: 'Linky - Signin',
+	title: 'Signin',
 };
 
 export default async function Page() {

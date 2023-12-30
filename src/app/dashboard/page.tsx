@@ -4,8 +4,13 @@ import UserUrls, { UserUrlsLoader } from '@/components/pages/dashboard';
 import { AddUrl } from '@/components/pages/dashboard/client';
 import { AUTH_PAGES } from '@/constants/auth';
 import { getServerAuthSession } from '@/server/auth';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { Fragment, Suspense } from 'react';
+
+export const metadata: Metadata = {
+	title: 'Dashboard',
+};
 
 export default async function page() {
 	const session = await getServerAuthSession();

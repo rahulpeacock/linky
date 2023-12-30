@@ -1,7 +1,12 @@
 import { db } from '@/server/db';
 import { urls } from '@/server/db/schema/urls';
 import { eq } from 'drizzle-orm';
+import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
+
+export const metadata: Metadata = {
+	title: 'Redirect',
+};
 
 export default async function page({ params }: { params: { shortenUrl: string } }) {
 	// 1. Get the shortenUrl
