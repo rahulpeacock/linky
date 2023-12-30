@@ -1,6 +1,5 @@
 import { TITLE } from '@/constants/app';
 import { nanoid } from '@/lib/utils/generate-nanoid';
-import { getServerBaseUrl } from '@/lib/utils/get-base-url';
 import { urls } from '@/server/db/schema/urls';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -31,7 +30,7 @@ export const urlRouter = createTRPCRouter({
 					})
 					.returning();
 
-				return { ...url[0], baseShortenUrl: `${getServerBaseUrl()}/x/${url[0]?.shortenUrl}` };
+				return { ...url[0] };
 			} catch (err) {
 				throw new Error(input.redirectUrl);
 			}
@@ -65,7 +64,6 @@ export const urlRouter = createTRPCRouter({
 				return {
 					success: true,
 					url,
-					baseShortenUrl: `${getServerBaseUrl()}/x/${url[0]?.shortenUrl}`,
 				};
 			} catch (err) {
 				throw new Error(input.title);
@@ -85,7 +83,6 @@ export const urlRouter = createTRPCRouter({
 				return {
 					success: true,
 					url,
-					baseShortenUrl: `${getServerBaseUrl()}/x/${shortenUrl}`,
 				};
 			} catch (err) {
 				throw new Error(input.title);
