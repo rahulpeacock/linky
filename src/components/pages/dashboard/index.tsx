@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getServerBaseUrl } from '@/lib/utils/get-base-url';
 import { db } from '@/server/db';
 import { Urls, urls } from '@/server/db/schema/urls';
-import { getBaseUrl } from '@/server/trpc/shared';
 import { eq } from 'drizzle-orm';
 import { Copy, Settings } from 'lucide-react';
 import { Session } from 'next-auth';
@@ -32,7 +32,7 @@ async function getUrls(id: string) {
 
 function UrlCard(props: Urls) {
 	const { title, redirectUrl, shortenUrl, clicks } = props;
-	const baseShortenUrl = `${getBaseUrl()}/x/${shortenUrl}`;
+	const baseShortenUrl = `${getServerBaseUrl()}/x/${shortenUrl}`;
 
 	return (
 		<div className='p-4 rounded-lg border mb-4'>
