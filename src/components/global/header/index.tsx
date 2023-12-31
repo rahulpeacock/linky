@@ -23,14 +23,14 @@ import { SignoutButton } from './client';
 
 export default function Header() {
 	return (
-		<header className='border-b'>
+		<header className='border-b px-[4%]'>
 			<div className='max-w-maxi mx-auto h-16 flex items-center justify-between'>
 				<div className='flex items-center justify-center'>
 					<Link href={'/'} className='font-semibold'>
 						Linkly
 					</Link>
 				</div>
-				<nav className='flex items-center justify-center gap-5'>
+				<nav className='flex items-center justify-center sm:gap-5 gap-3'>
 					<ThemeToggle />
 					<Suspense fallback={<Skeleton className='size-10 rounded-full' />}>
 						<HeaderAuth />
