@@ -233,12 +233,12 @@ function UrlSettingsForm(props: Urls) {
 						<FormItem>
 							<FormLabel>Short URL</FormLabel>
 							<div
-								className='relative before:content-[attr(data-base-url)] before:absolute before:left-2 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground before:pointer-events-none'
+								className='relative text-sm before:content-[attr(data-base-url)] before:absolute before:left-2 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground before:pointer-events-none'
 								data-base-url={`${getClientBaseUrl()}/x/`}
 							>
 								<FormControl>
 									<Input
-										className={cn(`${process.env.NODE_ENV === 'development' ? 'pl-[189px]' : 'pl-[222px]'}`)}
+										className={cn(`${process.env.NODE_ENV === 'development' ? 'pl-[165px]' : 'pl-[218px]'}`)}
 										placeholder='Your short url'
 										{...field}
 									/>
