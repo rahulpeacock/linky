@@ -7,7 +7,7 @@ import { MoveRight } from 'lucide-react';
 import { ClientSafeProvider, signIn } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 interface OAuthSigninProps {
 	providers: ClientSafeProvider[];
@@ -16,6 +16,11 @@ interface OAuthSigninProps {
 export default function OAuthSignin({ providers }: OAuthSigninProps) {
 	const { loading, id } = useAppSelector((state) => state.authSlice).signin;
 	const { resolvedTheme } = useTheme();
+	const [theme, setTheme] = useState('light');
+
+	useEffect(() => {
+		setTheme(resolvedTheme as string);
+	}, [resolvedTheme]);
 
 	return (
 		<Fragment>
@@ -32,13 +37,7 @@ export default function OAuthSignin({ providers }: OAuthSigninProps) {
 						{loading && id === provider.id ? (
 							<CircularLoader className='bg-foreground mr-5 border-x-foreground border-b-foreground' />
 						) : (
-							<Image
-								src={`/auth/${provider.id}-${resolvedTheme}-icon.svg`}
-								className='w-5 h-5 mr-5'
-								alt={`${provider.id}-icon`}
-								width={50}
-								height={50}
-							/>
+							<Image src={`/auth/${provider.id}-${theme}-icon.svg`} className='w-5 h-5 mr-5' alt={`${provider.id}-icon`} width={50} height={50} />
 						)}
 						<span>Continue with {provider.name}</span>
 						<MoveRight
