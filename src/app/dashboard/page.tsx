@@ -21,7 +21,7 @@ export default async function page() {
 	return (
 		<Fragment>
 			<Header />
-			<main className='min-h-hvh'>
+			<main className='min-h-hvh px-[4%]'>
 				<section>
 					<div className='max-w-maxi mx-auto py-8'>
 						<AddUrl />

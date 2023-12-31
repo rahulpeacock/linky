@@ -78,7 +78,7 @@ export function AddUrl() {
 						</FormItem>
 					)}
 				/>
-				<Button size='lg' type='submit' disabled={mutation.isLoading}>
+				<Button className='sm:px-8 px-6' size='lg' type='submit' disabled={mutation.isLoading}>
 					Shorten
 				</Button>
 			</form>

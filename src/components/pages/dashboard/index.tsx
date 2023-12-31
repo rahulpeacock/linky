@@ -41,7 +41,7 @@ function UrlCard(props: Urls) {
 				<CopyLink shortenUrl={baseShortenUrl} />
 				<UrlSettings {...props} />
 			</div>
-			<p className='text-sm text-muted-foreground mb-3 mt-1'>{redirectUrl}</p>
+			<p className='text-sm text-muted-foreground mb-3 mt-1 overflow-x-hidden'>{redirectUrl}</p>
 			<hr />
 			<div className='mt-3 flex items-center justify-between'>
 				<Button className='text-sm text-muted-foreground p-0 h-auto' type='button' variant='link' asChild>
