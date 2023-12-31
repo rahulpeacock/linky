@@ -15,8 +15,8 @@ export default async function Page() {
 	return (
 		<Fragment>
 			<AuthHeader />
-			<main>
-				<section className='px-5 sm:px-0'>
+			<main className='px-5 sm:px-0'>
+				<section>
 					<div className='max-w-maxi mx-auto flex items-start pt-24 justify-center min-h-hvh'>
 						<div className='max-w-md w-full py-8 px-6 rounded-xl border shadow-spread'>
 							<h2 className='text-2xl font-semibold'>Sign in</h2>
