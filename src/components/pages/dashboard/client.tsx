@@ -114,7 +114,7 @@ export function UrlSettings(props: Urls) {
 				onInteractOutside={(e) => loading && e.preventDefault()}
 				loading={loading}
 			>
-				<SheetHeader>
+				<SheetHeader className='text-left'>
 					<SheetTitle>Update link</SheetTitle>
 					<SheetDescription>Your can edit your shorten links</SheetDescription>
 				</SheetHeader>
